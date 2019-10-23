@@ -68,12 +68,12 @@ if flat_dark_data is None:
     print ("No Dark Flats")
 
 
-IMAGE_DIR = INPUT + IMAGES
+IMAGE_DIR = INPUT + IMAGES + "/"
 for root, dirs, files in os.walk(IMAGE_DIR):
     parts = os.path.split(root)
     pix_val = 0
     if args.noflats == False:
-        flat_data = makeFlat(INPUT + FLAT + parts[1].strip() + "/",  parts[1].strip(), flat_dark_data)
+        flat_data = makeFlat(INPUT, FLAT, parts[1].strip(),   flat_dark_data)
         if flat_data is not None:
             x_center = (int) (flat_data.shape[0] / 2)
             y_center = (int) (flat_data.shape[1] / 2)

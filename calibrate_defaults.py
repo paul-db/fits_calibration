@@ -21,10 +21,10 @@
 ##################################################################
 # File Paths - Change these if you want different names
 
-FLAT = "Flats/"
-DARK = "Darks/"
-FLATDARK = "FlatDarks/"
-IMAGES = "Lights/"
-OUTPUT = "Calibrated/"
+FLAT = "Flats"
+DARK = "Darks"
+FLATDARK = "FlatDarks"
+IMAGES = "Lights"
+OUTPUT = "Calibrated"
 
 ##################################################################

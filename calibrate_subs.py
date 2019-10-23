@@ -28,18 +28,18 @@ from calibrate_defaults import IMAGES, OUTPUT
 
 def makeDark(Dir, SubDir, median):
     iter = os.listdir(Dir + SubDir)
-    darks = np.array([pyfits.getdata(Dir + SubDir + "%s" % n) for n in iter])
+    darks = np.array([pyfits.getdata(Dir + SubDir + "/%s" % n) for n in iter])
     if darks.size > 0:
         if median == True:
             dark = np.median(darks,axis=0)
         else:
             dark = np.mean(darks,axis=0)
-        pyfits.writeto(Dir + SubDir + "MasterDark.fits", dark,  overwrite=True)
+        pyfits.writeto(Dir + "MasterDark.fits", dark,  overwrite=True)
         return dark
 
 def makeFlatDark(Dir, SubDir, median):
     iter = os.listdir(Dir + SubDir)
-    flatdarks = np.array([pyfits.getdata(Dir + SubDir + "%s" % n) for n in iter])
+    flatdarks = np.array([pyfits.getdata(Dir + SubDir + "/%s" % n) for n in iter])
     if flatdarks.size > 0:
         if median == True:
             flatdark = np.median(flatdarks,axis=0)
@@ -47,21 +47,21 @@ def makeFlatDark(Dir, SubDir, median):
             flatdark = np.mean(flatdarks,axis=0)
         return flatdark
     
-def makeFlat(Dir, SubDir, flatdark):
+def makeFlat(Dir, SubDir, Filter, flatdark):
     true_files = []
-    iter = os.listdir(Dir)
+    iter = os.listdir(Dir + SubDir + "/" + Filter + "/")
     for f in iter:
-        if os.path.isfile(Dir + f):
+        if os.path.isfile(Dir + SubDir + "/" +  Filter + "/" + f):
             true_files.append (f)
 
-    Flats = np.array([pyfits.getdata(Dir + "%s" % n) for n in true_files])
+    Flats = np.array([pyfits.getdata(Dir + SubDir + "/%s" % n) for n in true_files])
 
     if Flats.size > 0:
         flat = np.median(Flats, axis=0)
         if flatdark is not None:
             flat = (flat - flatdark).clip(min=1.0, max=65536.0)
             
-        pyfits.writeto(Dir + "MasterFlat%s.fits"%SubDir, flat, overwrite=True)
+        pyfits.writeto(Dir + "MasterFlat%s.fits"%Filter, flat, overwrite=True)
         return flat
 
 def handleStandardCalibration(path, name, flat, flatratio, dark):
@@ -79,9 +79,9 @@ def handleStandardCalibration(path, name, flat, flatratio, dark):
             if dark is None:
                 calib_data = image_data 
             else:
-                calib_data = (np.rint(((image_data)).clip(min=0, max=65536))).astype(int)
+                calib_data = (np.rint(((image_data)).clip(min=0, max=65536))).astype(np.uint16)
         else:
-            calib_data = (np.rint(((flatratio/flat) * (image_data)).clip(min=0, max=65536))).astype(int)
+            calib_data = (np.rint(((flatratio/flat) * (image_data)).clip(min=0, max=65536))).astype(np.uint16)
 
         outpath = path.replace(IMAGES, OUTPUT) + name
         print (" ==>", outpath)
