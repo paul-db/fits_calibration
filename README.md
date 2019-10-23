@@ -49,3 +49,5 @@ optional arguments:
   -d DIR, --dir DIR  Image root directory
   
   ```
+
+Calilbrated images ar written to the Calibrated folder structure
