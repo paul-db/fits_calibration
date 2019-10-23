@@ -27,7 +27,4 @@ FLATDARK = "FlatDarks/"
 IMAGES = "Lights/"
 OUTPUT = "Calibrated/"
 
-# Default image root directory = current working directory
-INPUT = "./"
-
 ##################################################################

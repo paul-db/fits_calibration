@@ -24,22 +24,22 @@ import numpy as np
 import astropy.io.fits as pyfits
 from glob import glob
 
-from calibrate_defaults import *
+from calibrate_defaults import IMAGES, OUTPUT
 
-def makeDark(path, median):
-    iter = os.listdir(INPUT + DARK)
-    darks = np.array([pyfits.getdata(INPUT + DARK + "%s" % n) for n in iter])
+def makeDark(Dir, SubDir, median):
+    iter = os.listdir(Dir + SubDir)
+    darks = np.array([pyfits.getdata(Dir + SubDir + "%s" % n) for n in iter])
     if darks.size > 0:
         if median == True:
             dark = np.median(darks,axis=0)
         else:
             dark = np.mean(darks,axis=0)
-        pyfits.writeto(INPUT + "MasterDark.fits", dark,  overwrite=True)
+        pyfits.writeto(Dir + SubDir + "MasterDark.fits", dark,  overwrite=True)
         return dark
 
-def makeFlatDark(path, median):
-    iter = os.listdir(INPUT + FLATDARK)
-    flatdarks = np.array([pyfits.getdata(INPUT + FLATDARK + "%s" % n) for n in iter])
+def makeFlatDark(Dir, SubDir, median):
+    iter = os.listdir(Dir + SubDir)
+    flatdarks = np.array([pyfits.getdata(Dir + SubDir + "%s" % n) for n in iter])
     if flatdarks.size > 0:
         if median == True:
             flatdark = np.median(flatdarks,axis=0)
@@ -47,23 +47,23 @@ def makeFlatDark(path, median):
             flatdark = np.mean(flatdarks,axis=0)
         return flatdark
     
-def makeFlat(path, flatdark, fname):
-    ftype=os.path.split(path)
-
+def makeFlat(Dir, SubDir, flatdark):
+    print (Dir, "---", SubDir, flatdark)
     true_files = []
-    iter = os.listdir(path)
+    iter = os.listdir(Dir)
     for f in iter:
-        if os.path.isfile(path + f):
+        if os.path.isfile(Dir + f):
             true_files.append (f)
 
-    Flats = np.array([pyfits.getdata(path + "%s" % n) for n in true_files])
+    Flats = np.array([pyfits.getdata(Dir + "%s" % n) for n in true_files])
 
     if Flats.size > 0:
         flat = np.median(Flats, axis=0)
         if flatdark is not None:
-            flat = (flat - flatdark).clip(min=1, max=65536)
+            print (flat)
+            flat = (flat - flatdark).clip(min=1.0, max=65536.0)
             
-        pyfits.writeto(INPUT + "MasterFlat%s.fits"%fname, flat, overwrite=True)
+        pyfits.writeto(Dir + "MasterFlat%s.fits"%SubDir, flat, overwrite=True)
         return flat
 
 def handleStandardCalibration(path, name, flat, flatratio, dark):

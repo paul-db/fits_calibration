@@ -24,7 +24,7 @@ import os
 import sys
 #import argparse
 import numpy as np
-import astropy.io.fits as pyfits
+#import astropy.io.fits as pyfits
 from argparse import ArgumentParser
 from glob import glob
 
@@ -47,10 +47,12 @@ args = parser.parse_args()
          
 if args.dir != None:
     INPUT = args.dir + "/"
+else:
+    INPUT = "./"
     
 
 if args.nodarks == False:
-    dark_data = makeDark(INPUT + DARK, args.median)
+    dark_data = makeDark(INPUT, DARK, args.median)
 else:
     dark_data = None
 
@@ -58,7 +60,7 @@ if dark_data is None:
     print ("No Darks")
     
 if args.nodarkflats == False:
-    flat_dark_data = makeFlatDark (INPUT + FLATDARK, args.median)
+    flat_dark_data = makeFlatDark (INPUT, FLATDARK, args.median)
 else:
     flat_dark_data = None
 
@@ -71,7 +73,7 @@ for root, dirs, files in os.walk(IMAGE_DIR):
     parts = os.path.split(root)
     pix_val = 0
     if args.noflats == False:
-        flat_data = makeFlat(INPUT + FLAT + parts[1].strip() + "/", flat_dark_data, parts[1].strip())
+        flat_data = makeFlat(INPUT + FLAT + parts[1].strip() + "/",  parts[1].strip(), flat_dark_data)
         if flat_data is not None:
             x_center = (int) (flat_data.shape[0] / 2)
             y_center = (int) (flat_data.shape[1] / 2)
