@@ -9,7 +9,7 @@ For a calibratrion use the following steps from the command line:
 Create the necessary folder structure with build_calibration_tree.py
 For images taken with different filters, generate also a subfolder per filter with the -filter option
 ```
-python *path_to_install_folder*/build_calibration_tree.py -h
+python path_to_install_folder/build_calibration_tree.py -h
 
 usage: build_calibration_tree.py [-h] [-filter FILTER [FILTER ...]]
 
