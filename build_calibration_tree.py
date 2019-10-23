@@ -46,6 +46,6 @@ MakeAdir(OUTPUT)
 MakeAdir(IMAGES)
 if args.filter is not None:
     for f in args.filter:
-        MakeAdir(FLAT+f)
-        MakeAdir(IMAGES+f)
-        MakeAdir(OUTPUT+f)
+        MakeAdir(FLAT + "/" +f)
+        MakeAdir(IMAGES + "/" +f)
+        MakeAdir(OUTPUT + "/" + f)
