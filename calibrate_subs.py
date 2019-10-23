@@ -48,7 +48,6 @@ def makeFlatDark(Dir, SubDir, median):
         return flatdark
     
 def makeFlat(Dir, SubDir, flatdark):
-    print (Dir, "---", SubDir, flatdark)
     true_files = []
     iter = os.listdir(Dir)
     for f in iter:
@@ -60,7 +59,6 @@ def makeFlat(Dir, SubDir, flatdark):
     if Flats.size > 0:
         flat = np.median(Flats, axis=0)
         if flatdark is not None:
-            print (flat)
             flat = (flat - flatdark).clip(min=1.0, max=65536.0)
             
         pyfits.writeto(Dir + "MasterFlat%s.fits"%SubDir, flat, overwrite=True)
