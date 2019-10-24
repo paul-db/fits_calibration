@@ -3,7 +3,7 @@
 depends on: Python 3, astropy, numpy
 
 Calibrates  FITS Astronomy Images according to the Standar Calibration protocol using Lights, Darks, Flats and FlatDarks.
-Calibrated images are written to the Calibrated folder in fits format (BITPIX=16).
+Calibrated images are written to the Calibrated folder in fits format (BITPIX=32).
 
 For a calibratrion use the following steps from the command line:
 

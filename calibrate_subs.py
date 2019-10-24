@@ -59,7 +59,7 @@ def makeFlat(Dir, SubDir, Filter, flatdark):
     if Flats.size > 0:
         flat = np.median(Flats, axis=0)
         if flatdark is not None:
-            flat = (flat - flatdark).clip(min=1.0, max=65536.0)
+            flat = (flat - flatdark).clip(min=1)
             
         pyfits.writeto(Dir + "MasterFlat%s.fits"%Filter, flat, overwrite=True)
         return flat
@@ -79,9 +79,9 @@ def handleStandardCalibration(path, name, flat, flatratio, dark):
             if dark is None:
                 calib_data = image_data 
             else:
-                calib_data = (np.rint(((image_data)).clip(min=0, max=65536))).astype(np.uint16)
+                calib_data = (np.rint(((image_data)).clip(min=0, max=65536))).astype(np.int32)
         else:
-            calib_data = (np.rint(((flatratio/flat) * (image_data)).clip(min=0, max=65536))).astype(np.uint16)
+            calib_data = (np.rint(((flatratio/flat) * (image_data)).clip(min=0, max=65536))).astype(np.int32)
 
         outpath = path.replace(IMAGES, OUTPUT) + name
         print (" ==>", outpath)
